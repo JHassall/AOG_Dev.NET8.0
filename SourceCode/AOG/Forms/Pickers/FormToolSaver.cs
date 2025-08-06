@@ -1,31 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using AOG;
+using AOG.Classes;
 
 namespace AgOpenGPS
 {
     public partial class FormToolSaver : Form
     {
         //class variables
-        private readonly FormGPS mf = null;
+        private readonly AOG.FormGPS mf = null;
 
         public FormToolSaver(Form callingForm)
         {
             //get copy of the calling main form
-            mf = callingForm as FormGPS;
+            mf = callingForm as AOG.FormGPS;
             InitializeComponent();
 
             //this.bntOK.Text = gStr.gsForNow;
             //this.btnSave.Text = gStr.gsToFile;
 
-            this.Text = gStr.gsSaveTool;
+            this.Text = "Save Tool";
         }
 
         private void FormFlags_Load(object sender, EventArgs e)
         {
-            lblLast.Text = gStr.gsCurrent + mf.toolFileName;
+            lblLast.Text = "Current: " + mf.toolFileName;
             DirectoryInfo dinfo = new DirectoryInfo(mf.toolsDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.txt");
 
@@ -41,7 +43,7 @@ namespace AgOpenGPS
         {
             DialogResult result3 = MessageBox.Show(
                 "Overwrite: " + cboxTool.SelectedItem.ToString() + ".txt",
-                gStr.gsSaveAndReturn,
+                "Save and Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
                 MessageBoxDefaultButton.Button2);

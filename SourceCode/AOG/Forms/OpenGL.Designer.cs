@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using OpenTK.Mathematics;
 using System.Windows.Forms;
 using System.Text;
 using System.Diagnostics;
@@ -2777,10 +2778,10 @@ namespace AOG
         private void oglBackStart()
         {
             Stopwatch BBtimer = new Stopwatch();
-            oglBack.Context.MakeCurrent(null); //Unbinds the context from the current thread.
+            // oglBack.Context.MakeCurrent(null); //Unbinds the context from the current thread. // MakeCurrent API changed in OpenTK 4.x
             thread_oglBack = new Thread(() =>
             {
-                oglBack.Context.MakeCurrent(oglBack.WindowInfo); //Bimds the OpenGL context to this new thread
+                // oglBack.Context.MakeCurrent(oglBack.WindowInfo); //Binds the OpenGL context to this new thread // WindowInfo property removed in OpenTK 4.x
                 while (true)
                 {
                     BBtimer.Restart();

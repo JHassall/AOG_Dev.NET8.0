@@ -1,35 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using AOG.Classes;
 
-namespace AgOpenGPS
+namespace AOG
 {
     public partial class FormToolPicker : Form
     {
         //class variables
-        private readonly FormGPS mf = null;
+        private AOG.FormGPS mf = null;
 
         public FormToolPicker(Form callingForm)
         {
             //get copy of the calling main form
-            mf = callingForm as FormGPS;
+            mf = callingForm as AOG.FormGPS;
             InitializeComponent();
 
-            this.Text = gStr.gsLoadTool;
+            this.Text = gStr.Get(gs.gsLoadTool);
         }
 
         private void FormFlags_Load(object sender, EventArgs e)
         {
-            lblLast.Text = gStr.gsCurrent + mf.toolFileName;
+            lblLast.Text = gStr.Get(gs.gsCurrent) + RegistrySettings.toolFileName;
 
-            DirectoryInfo dinfo = new DirectoryInfo(mf.toolsDirectory);
+            DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.toolsDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.txt");
             if (Files.Length == 0)
             {
                 Close();
-                var form = new FormTimedMessage(2000, gStr.gsNoToolSaved, gStr.gsSaveAToolFirst);
-                form.Show();
+                mf.YesMessageBox(gStr.Get(gs.gsNoToolSaved) + " " + gStr.Get(gs.gsSaveAToolFirst));
 
             }
 
@@ -41,7 +41,7 @@ namespace AgOpenGPS
 
         private void cboxVeh_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mf.FileOpenTool(mf.toolsDirectory + cboxTool.SelectedItem.ToString() + ".txt");
+            Settings.Tool.Load(); // Load tool settings
             Close();
         }
     }

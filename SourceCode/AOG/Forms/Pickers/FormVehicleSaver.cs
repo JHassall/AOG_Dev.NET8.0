@@ -1,31 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using AOG;
+using AOG.Classes;
 
 namespace AgOpenGPS
 {
     public partial class FormVehicleSaver : Form
     {
         //class variables
-        private readonly FormGPS mf = null;
+        private readonly AOG.FormGPS mf = null;
 
         public FormVehicleSaver(Form callingForm)
         {
             //get copy of the calling main form
-            mf = callingForm as FormGPS;
+            mf = callingForm as AOG.FormGPS;
             InitializeComponent();
 
             //this.bntOK.Text = gStr.gsForNow;
             //this.btnSave.Text = gStr.gsToFile;
 
-            this.Text = gStr.gsSaveVehicle;
+            this.Text = "Save Vehicle";
         }
 
         private void FormFlags_Load(object sender, EventArgs e)
         {
-            lblLast.Text = gStr.gsCurrent + mf.vehicleFileName;
+            lblLast.Text = "Current: " + mf.vehicleFileName;
             DirectoryInfo dinfo = new DirectoryInfo(mf.vehiclesDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.xml");
 
@@ -41,7 +43,7 @@ namespace AgOpenGPS
         {
             DialogResult result3 = MessageBox.Show(
                 "Overwrite: " + cboxVeh.SelectedItem.ToString() + ".xml",
-                gStr.gsSaveAndReturn,
+                "Save and Return",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
                 MessageBoxDefaultButton.Button2);

@@ -1,4 +1,4 @@
-﻿namespace AOG.Forms.Field
+namespace AOG.Forms.Field
 {
     partial class FormAgShareDownloader
     {
@@ -31,7 +31,7 @@
             this.lbFields = new System.Windows.Forms.ListView();
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnOpen = new System.Windows.Forms.Button();
-            this.glControl1 = new OpenTK.GLControl();
+            this.glControl1 = new OpenTK.WinForms.GLControl();
             this.btnClose = new System.Windows.Forms.Button();
             this.lblSelectedField = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -77,12 +77,14 @@
             // glControl1
             // 
             this.glControl1.BackColor = System.Drawing.Color.DarkGray;
-            this.glControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            // TODO: BorderStyle property not available in OpenTK 4.x GLControl
+            // this.glControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.glControl1.Location = new System.Drawing.Point(510, 12);
             this.glControl1.Name = "glControl1";
             this.glControl1.Size = new System.Drawing.Size(654, 567);
             this.glControl1.TabIndex = 3;
-            this.glControl1.VSync = false;
+            // TODO: VSync property not available in OpenTK 4.x
+            // this.glControl1.VSync = false;
             // 
             // btnClose
             // 
@@ -140,7 +142,7 @@
         private System.Windows.Forms.ListView lbFields;
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.Button btnOpen;
-        private OpenTK.GLControl glControl1;
+        private OpenTK.WinForms.GLControl glControl1;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblSelectedField;
     }

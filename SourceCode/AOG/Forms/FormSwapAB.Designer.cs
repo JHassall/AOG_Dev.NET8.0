@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+namespace AOG
 {
     partial class FormSwapAB
     {
@@ -124,7 +124,8 @@
             // 
             this.btnListUse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnListUse.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold);
-            this.btnListUse.Image = global::AgOpenGPS.Properties.Resources.OK64;
+            // TODO: Fix Properties namespace reference for .NET 8.0 migration
+            // this.btnListUse.Image = global::AgOpenGPS.Properties.Resources.OK64;
             this.btnListUse.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnListUse.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.btnListUse.Location = new System.Drawing.Point(776, 391);

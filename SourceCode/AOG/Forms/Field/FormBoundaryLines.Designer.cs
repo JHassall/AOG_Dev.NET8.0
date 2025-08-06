@@ -1,4 +1,4 @@
-﻿namespace AOG
+namespace AOG
 {
     partial class FormBoundaryLines
     {
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.oglSelf = new OpenTK.GLControl();
+            this.oglSelf = new OpenTK.WinForms.GLControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btnAShrink = new System.Windows.Forms.Button();
             this.btnBShrink = new System.Windows.Forms.Button();
@@ -57,7 +57,8 @@
             this.oglSelf.Name = "oglSelf";
             this.oglSelf.Size = new System.Drawing.Size(700, 700);
             this.oglSelf.TabIndex = 183;
-            this.oglSelf.VSync = false;
+            // TODO: VSync property not available in OpenTK 4.x
+            // this.oglSelf.VSync = false;
             this.oglSelf.Load += new System.EventHandler(this.oglSelf_Load);
             this.oglSelf.Paint += new System.Windows.Forms.PaintEventHandler(this.oglSelf_Paint);
             this.oglSelf.MouseDown += new System.Windows.Forms.MouseEventHandler(this.oglSelf_MouseDown);
@@ -386,7 +387,7 @@
 
         #endregion
 
-        private OpenTK.GLControl oglSelf;
+        private OpenTK.WinForms.GLControl oglSelf;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnCycleForward;

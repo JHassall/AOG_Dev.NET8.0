@@ -1,4 +1,4 @@
-﻿namespace AOG
+namespace AOG
 {
     public class CModuleComm
     {
@@ -38,6 +38,30 @@
         public bool isSteerWorkSwitchEnabled;
 
         public bool workSwitchHigh, oldWorkSwitchHigh, steerSwitchHigh, oldSteerSwitchRemote;
+
+        // Machine data array and indices for FormModules
+        public byte[] machineData = new byte[16];
+        public int mdSpeedXFour = 0;
+        public int mdUTurn = 1;
+        public int mdTree = 2;
+        public int mdHydLift = 3;
+
+        // Auto steer data array and indices for FormModules
+        public byte[] autoSteerData = new byte[16];
+        public int sdHeaderHi = 0;
+        public int sdHeaderLo = 1;
+        public int sdSpeed = 2;
+        public int sdDistanceHi = 3;
+        public int sdDistanceLo = 4;
+        public int sdSteerAngleHi = 5;
+        public int sdSteerAngleLo = 6;
+        public int sdChecksum = 7;
+
+        public string serialRecvAutoSteerStr = "";
+        public int mdHeaderHi = 8;
+        public int mdHeaderLo = 9;
+        public int mdSectionControlByteLo = 10;
+        public int mdSectionControlByteHi = 11;
 
         //constructor
         public CModuleComm(FormGPS _f)

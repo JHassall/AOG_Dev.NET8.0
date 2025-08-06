@@ -83,6 +83,17 @@ namespace AOG
         //used by filePicker Form to return picked file and directory
         public string filePickerFileAndDirectory, jobPickerFileAndDirectory;
 
+        // Directory properties for picker forms
+        public string vehiclesDirectory = Path.Combine(Application.StartupPath, "Vehicles");
+        public string toolsDirectory = Path.Combine(Application.StartupPath, "Tools");
+        public string envDirectory = Path.Combine(Application.StartupPath, "Environments");
+        public string toolFileName = "";
+        public string vehicleFileName = "";
+        public string envFileName = "";
+
+        // Keyboard properties
+        public bool isKeyboardOn = false;
+
         //the position of the GPS Data window within the FormGPS window
         public int GPSDataWindowLeft = 80, GPSDataWindowTopOffset = 220;
 
@@ -1019,6 +1030,12 @@ namespace AOG
             sender.BackColor = colour;
         }
 
+        // Overload for single parameter calls from picker forms
+        public void KeyboardToText(TextBox sender)
+        {
+            KeyboardToText(sender, this);
+        }
+
         public void FieldMenuButtonEnableDisable(bool isOn)
         {
             SmoothABtoolStripMenu.Enabled = isOn;
@@ -1122,5 +1139,18 @@ namespace AOG
         }
 
         private readonly Random _random = new Random();
+
+        // Missing methods needed by picker forms
+        public void FileSaveEnvironment(string directory)
+        {
+            // Placeholder implementation for environment file saving
+            // TODO: Implement actual environment file saving logic
+        }
+
+        public void FileSaveTool(string directory)
+        {
+            // Placeholder implementation for tool file saving
+            // TODO: Implement actual tool file saving logic
+        }
     }//class FormGPS
 }//namespace AOG

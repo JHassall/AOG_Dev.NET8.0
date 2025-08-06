@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.IO;
 
@@ -14,14 +14,18 @@ namespace AOG
         public static string toolsDirectory =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AOG", "Tools");
 
+        public static string envDirectory =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AOG", "Environments");
+
         public static string logsDirectory =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "AOG", "Logs");
 
-        public static string vehicleFileName = "";
-        public static string toolFileName = "";
+        public static string vehicleFileName { get; set; } = "";
+        public static string toolFileName { get; set; } = "";
+        public static string envFileName { get; set; } = "";
+        public static string fieldsDirectory { get; set; } = "";
         public static string workingDirectory = "Default";
         public static string baseDirectory = workingDirectory;
-        public static string fieldsDirectory = workingDirectory;
 
         public static void Load()
         {

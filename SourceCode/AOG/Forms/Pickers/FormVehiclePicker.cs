@@ -1,36 +1,38 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using AOG.Classes;
 
-namespace AgOpenGPS
+namespace AOG
 {
     public partial class FormVehiclePicker : Form
     {
         //class variables
-        private readonly FormGPS mf = null;
+        private readonly AOG.FormGPS mf = null;
 
         public FormVehiclePicker(Form callingForm)
         {
             //get copy of the calling main form
-            mf = callingForm as FormGPS;
+            mf = callingForm as AOG.FormGPS;
             InitializeComponent();
 
             //this.bntOK.Text = gStr.gsForNow;
             //this.btnSave.Text = gStr.gsToFile;
 
-            this.Text = gStr.gsLoadVehicle;
+            this.Text = gStr.Get(gs.gsLoadVehicle);
         }
 
         private void FormFlags_Load(object sender, EventArgs e)
         {
-            lblLast.Text = gStr.gsCurrent + mf.vehicleFileName;
-            DirectoryInfo dinfo = new DirectoryInfo(mf.vehiclesDirectory);
+            lblLast.Text = gStr.Get(gs.gsCurrent) + RegistrySettings.vehicleFileName;
+            DirectoryInfo dinfo = new DirectoryInfo(RegistrySettings.vehiclesDirectory);
             FileInfo[] Files = dinfo.GetFiles("*.xml");
             if (Files.Length == 0)
             {
                 Close();
-                var form = new FormTimedMessage(2000, gStr.gsNoVehiclesSaved, gStr.gsSaveAVehicleFirst);
+                mf.YesMessageBox(gStr.Get(gs.gsNoVehiclesSaved) + " " + gStr.Get(gs.gsSaveAVehicleFirst));
+                var form = new FormTimedMessage(2000, gStr.Get(gs.gsNoVehiclesSaved), gStr.Get(gs.gsSaveAVehicleFirst));
                 form.Show();
 
             }
@@ -44,7 +46,7 @@ namespace AgOpenGPS
         private void cboxVeh_SelectedIndexChanged(object sender, EventArgs e)
         {
             //mf.FileOpenVehicle(mf.vehiclesDirectory + cboxVeh.SelectedItem.ToString() + ".xml");
-            SettingsIO.ImportAll( mf.vehiclesDirectory + cboxVeh.SelectedItem.ToString() + ".XML");
+            Settings.Vehicle.Load(); // Load vehicle settings
 
             mf.LoadSettings();
             Close();

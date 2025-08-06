@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+namespace AgOpenGPS
 {
     partial class FormToolSaver
     {
@@ -77,7 +77,7 @@
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnSave.Font = new System.Drawing.Font("Tahoma", 15.75F);
-            this.btnSave.Image = global::AgOpenGPS.Properties.Resources.FileSave;
+            // this.btnSave.Image = global::AgOpenGPS.Properties.Resources.FileSave;
             this.btnSave.Location = new System.Drawing.Point(433, 173);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(127, 71);

@@ -1,4 +1,4 @@
-﻿//Please, if you use this give me some credit
+//Please, if you use this give me some credit
 //Copyright BrianTee, copy right out of it.
 
 using System;
@@ -9,14 +9,14 @@ namespace AgOpenGPS
 {
     public partial class FormModules : Form
     {
-        private readonly FormGPS mf = null;
+        private readonly AOG.FormGPS mf = null;
 
         double disp = 0;
         int dispInt = 0;
 
         public FormModules(Form callingForm)
         {
-            mf = callingForm as FormGPS;
+            mf = callingForm as AOG.FormGPS;
             InitializeComponent();
         }
 

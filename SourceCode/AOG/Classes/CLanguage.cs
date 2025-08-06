@@ -1,6 +1,7 @@
-﻿using ExcelDataReader;
+using ExcelDataReader;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
 
@@ -26,15 +27,8 @@ namespace AOG.Classes
 
                     reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream);
 
-                    var conf = new ExcelDataSetConfiguration
-                    {
-                        ConfigureDataTable = _ => new ExcelDataTableConfiguration
-                        {
-                            UseHeaderRow = false
-                        }
-                    };
-
-                    var dataSet = reader.AsDataSet(conf);
+                    // Use simple AsDataSet() method for compatibility
+                    var dataSet = reader.AsDataSet();
 
                     var dataTable = dataSet.Tables[0];
 
@@ -91,15 +85,8 @@ namespace AOG.Classes
 
                     reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream);
 
-                    var conf = new ExcelDataSetConfiguration
-                    {
-                        ConfigureDataTable = _ => new ExcelDataTableConfiguration
-                        {
-                            UseHeaderRow = false
-                        }
-                    };
-
-                    var dataSet = reader.AsDataSet(conf);
+                    // Use simple AsDataSet() method for compatibility
+                    var dataSet = reader.AsDataSet();
 
                     var dataTable = dataSet.Tables[0];
 
@@ -238,6 +225,17 @@ namespace AOG.Classes
         public static string gsDisplay = "gsDisplay";
         public static string gsDistance = "gsDistance";
         public static string gsDistanceToFlag = "gsDistanceToFlag";
+        
+        // Picker form string constants
+        public static string gsLoadEnvironment = "gsLoadEnvironment";
+        public static string gsNoEnvironmentSaved = "gsNoEnvironmentSaved";
+        public static string gsSaveAnEnvironmentFirst = "gsSaveAnEnvironmentFirst";
+        public static string gsLoadTool = "gsLoadTool";
+        public static string gsNoToolSaved = "gsNoToolSaved";
+        public static string gsSaveAToolFirst = "gsSaveAToolFirst";
+        public static string gsLoadVehicle = "gsLoadVehicle";
+        public static string gsNoVehiclesSaved = "gsNoVehiclesSaved";
+        public static string gsSaveAVehicleFirst = "gsSaveAVehicleFirst";
         public static string gsDriveIn = "gsDriveIn";
         public static string gsDriveThru = "gsDriveThru";
         public static string gsDriving = "gsDriving";
@@ -253,11 +251,15 @@ namespace AOG.Classes
         public static string gsEncoderCounts = "gsEncoderCounts";
         public static string gsEnterCoordinatesForSimulator = "gsEnterCoordinatesForSimulator";
         public static string gsEnterFieldName = "gsEnterFieldName";
+        public static string gsEnteraValue = "gsEnteraValue";
         public static string gsEnterJobName = "gsEnterJobName";
-        public static string gsEnterName = "gsEnterName";
+        public static string gsEnvironment = "gsEnvironment";
+        public static string gsError = "gsError";
+        public static string gsSaveVehicle = "gsSaveVehicle";
+        public static string gsSaveTool = "gsSaveTool";
+        public static string gsSaveEnvironment = "gsSaveEnvironment";
         public static string gsEnterRecordName = "gsEnterRecordName";
         public static string gsEnterSimCoords = "gsEnterSimCoords";
-        public static string gsError = "gsError";
         public static string gsErrorreadingKML = "gsErrorreadingKML";
         public static string gsExit = "gsExit";
         public static string gsExitToWindows = "gsExitToWindows";

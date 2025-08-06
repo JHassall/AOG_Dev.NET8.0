@@ -71,14 +71,14 @@ namespace AOG
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuFlagForm = new System.Windows.Forms.ToolStripMenuItem();
             this.cboxpRowWidth = new System.Windows.Forms.ComboBox();
-            this.oglZoom = new OpenTK.GLControl();
+            this.oglZoom = new OpenTK.WinForms.GLControl();
             this.btnResetSim = new System.Windows.Forms.Button();
             this.btnResetSteerAngle = new System.Windows.Forms.Button();
             this.timerSim = new System.Windows.Forms.Timer(this.components);
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.hsbarSteerAngle = new System.Windows.Forms.HScrollBar();
-            this.oglMain = new OpenTK.GLControl();
-            this.oglBack = new OpenTK.GLControl();
+            this.oglMain = new OpenTK.WinForms.GLControl();
+            this.oglBack = new OpenTK.WinForms.GLControl();
             this.lblHz = new System.Windows.Forms.Label();
             this.statusStripLeft = new System.Windows.Forms.StatusStrip();
             this.distanceToolBtn = new System.Windows.Forms.ToolStripDropDownButton();
@@ -586,13 +586,13 @@ namespace AOG
             // oglZoom
             // 
             this.oglZoom.BackColor = System.Drawing.Color.Black;
-            this.oglZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            // this.oglZoom.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle; // BorderStyle property may not be available in OpenTK 4.x
             this.oglZoom.Location = new System.Drawing.Point(122, 63);
             this.oglZoom.Margin = new System.Windows.Forms.Padding(0);
             this.oglZoom.Name = "oglZoom";
             this.oglZoom.Size = new System.Drawing.Size(41, 44);
             this.oglZoom.TabIndex = 182;
-            this.oglZoom.VSync = false;
+            // this.oglZoom.VSync = false; // VSync property removed in OpenTK 4.x
             this.oglZoom.Load += new System.EventHandler(this.oglZoom_Load);
             this.oglZoom.Paint += new System.Windows.Forms.PaintEventHandler(this.oglZoom_Paint);
             // 
@@ -661,7 +661,7 @@ namespace AOG
             this.oglMain.Name = "oglMain";
             this.oglMain.Size = new System.Drawing.Size(681, 632);
             this.oglMain.TabIndex = 180;
-            this.oglMain.VSync = false;
+            // this.oglMain.VSync = false; // VSync property removed in OpenTK 4.x
             this.oglMain.Load += new System.EventHandler(this.oglMain_Load);
             this.oglMain.Paint += new System.Windows.Forms.PaintEventHandler(this.oglMain_Paint);
             this.oglMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.oglMain_MouseDown);
@@ -678,7 +678,7 @@ namespace AOG
             this.oglBack.Name = "oglBack";
             this.oglBack.Size = new System.Drawing.Size(500, 300);
             this.oglBack.TabIndex = 181;
-            this.oglBack.VSync = false;
+            // this.oglBack.VSync = false; // VSync property removed in OpenTK 4.x
             this.oglBack.Load += new System.EventHandler(this.oglBack_Load);
             this.oglBack.Paint += new System.Windows.Forms.PaintEventHandler(this.oglBack_Paint);
             // 
@@ -2821,9 +2821,9 @@ namespace AOG
         public System.Windows.Forms.Button btnAutoYouTurn;
         public System.Windows.Forms.Button btnAutoSteer;
         private System.Windows.Forms.HScrollBar hsbarSteerAngle;
-        private OpenTK.GLControl oglZoom;
-        private OpenTK.GLControl oglMain;
-        private OpenTK.GLControl oglBack;
+        private OpenTK.WinForms.GLControl oglMain;
+        private OpenTK.WinForms.GLControl oglZoom;
+        private OpenTK.WinForms.GLControl oglBack;
         private System.Windows.Forms.ComboBox cboxpRowWidth;
         private System.Windows.Forms.Label lblHz;
         public System.Windows.Forms.Button btnContour;

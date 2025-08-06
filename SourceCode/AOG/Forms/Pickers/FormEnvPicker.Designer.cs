@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+namespace AOG
 {
     partial class FormEnvPicker
     {

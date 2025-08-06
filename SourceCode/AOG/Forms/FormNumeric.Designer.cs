@@ -1,4 +1,4 @@
-﻿namespace AgOpenGPS
+namespace AgOpenGPS
 {
     partial class FormNumeric
     {
@@ -32,8 +32,8 @@
             this.lblMax = new System.Windows.Forms.Label();
             this.lblMin = new System.Windows.Forms.Label();
             this.keypad1 = new Keypad.NumKeypad();
-            this.btnDistanceUp = new ProXoft.WinForms.RepeatButton();
-            this.btnDistanceDn = new ProXoft.WinForms.RepeatButton();
+            // this.btnDistanceUp = new ProXoft.WinForms.RepeatButton();
+            // this.btnDistanceDn = new ProXoft.WinForms.RepeatButton();
             this.SuspendLayout();
             // 
             // tboxNumber
@@ -83,7 +83,7 @@
             this.btnDistanceUp.FlatAppearance.BorderSize = 2;
             this.btnDistanceUp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDistanceUp.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDistanceUp.Image = global::AgOpenGPS.Properties.Resources.UpArrow64;
+            // this.btnDistanceUp.Image = global::AgOpenGPS.Properties.Resources.UpArrow64;
             this.btnDistanceUp.Location = new System.Drawing.Point(71, 3);
             this.btnDistanceUp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDistanceUp.Name = "btnDistanceUp";
@@ -100,7 +100,7 @@
             this.btnDistanceDn.FlatAppearance.BorderSize = 2;
             this.btnDistanceDn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDistanceDn.Font = new System.Drawing.Font("Tahoma", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDistanceDn.Image = global::AgOpenGPS.Properties.Resources.DnArrow64;
+            // this.btnDistanceDn.Image = global::AgOpenGPS.Properties.Resources.DnArrow64;
             this.btnDistanceDn.Location = new System.Drawing.Point(2, 3);
             this.btnDistanceDn.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.btnDistanceDn.Name = "btnDistanceDn";
@@ -141,7 +141,7 @@
         private Keypad.NumKeypad keypad1;
         private System.Windows.Forms.Label lblMax;
         private System.Windows.Forms.Label lblMin;
-        private ProXoft.WinForms.RepeatButton btnDistanceUp;
-        private ProXoft.WinForms.RepeatButton btnDistanceDn;
+        private System.Windows.Forms.Button btnDistanceUp;
+        private System.Windows.Forms.Button btnDistanceDn;
     }
 }
