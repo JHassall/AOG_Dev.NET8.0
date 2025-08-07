@@ -1,0 +1,357 @@
+<!--
+Main Window - WPF 3D Agricultural Visualization
+===============================================
+
+This is the main window for the WPF 3D migration of AgOpenGPS.
+Replaces the Windows Forms FormGPS with modern WPF 3D visualization.
+
+Migration Architecture:
+- Uses HelixToolkit.Wpf.SharpDX for high-performance 3D rendering
+- Implements MVVM pattern for clean separation of concerns
+- Supports multiple camera views for field and ABLS boom visualization
+- Integrates DEM terrain data for accurate ground contour representation
+
+Layout Structure:
+1. Main 3D Viewport (HelixViewport3D) - Primary field and vehicle visualization
+2. Control Panels - GPS status, boom controls, field settings
+3. Camera View Selector - Switch between field view and top/rear view
+4. Status Bar - Real-time GPS, sensor, and system status
+
+ABLS Integration:
+- 3D boom visualization with terrain following
+- DEM-based terrain surface rendering
+- Real-time boom positioning feedback
+- Top/rear camera view for boom operation monitoring
+-->
+<Window x:Class="AOG_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hx="http://helix-toolkit.org/wpf"
+        mc:Ignorable="d"
+        Title="AgOpenGPS - WPF 3D Agricultural Guidance System"
+        Height="900" Width="1400"
+        MinHeight="600" MinWidth="800"
+        WindowState="Maximized"
+        Background="{StaticResource BackgroundBrush}">
+
+    <!-- 
+    Main Window Grid Layout
+    =======================
+    Organized for optimal agricultural workflow:
+    - Large 3D viewport for field visualization
+    - Docked control panels for GPS and boom controls
+    - Status information always visible
+    -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Menu and toolbar area -->
+            <RowDefinition Height="Auto"/>
+            <!-- Main content area with 3D viewport and controls -->
+            <RowDefinition Height="*"/>
+            <!-- Status bar -->
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 
+        Menu Bar
+        ========
+        Main application menu with field management, GPS settings, and ABLS configuration
+        -->
+        <Menu Grid.Row="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1">
+            <MenuItem Header="_Field">
+                <MenuItem Header="_New Field..." Click="NewField_Click"/>
+                <MenuItem Header="_Open Field..." Click="OpenField_Click"/>
+                <MenuItem Header="_Save Field" Click="SaveField_Click"/>
+                <Separator/>
+                <MenuItem Header="Import _DEM..." Click="ImportDEM_Click"/>
+                <MenuItem Header="_Boundaries..." Click="EditBoundaries_Click"/>
+            </MenuItem>
+            
+            <MenuItem Header="_GPS">
+                <MenuItem Header="_Settings..." Click="GPSSettings_Click"/>
+                <MenuItem Header="_Calibration..." Click="GPSCalibration_Click"/>
+                <MenuItem Header="Connection _Status" Click="GPSStatus_Click"/>
+            </MenuItem>
+            
+            <MenuItem Header="_ABLS">
+                <MenuItem Header="Boom _Configuration..." Click="BoomConfig_Click"/>
+                <MenuItem Header="_Sensor Calibration..." Click="SensorCalibration_Click"/>
+                <MenuItem Header="_Height Settings..." Click="HeightSettings_Click"/>
+                <MenuItem Header="System _Status" Click="ABLSStatus_Click"/>
+            </MenuItem>
+            
+            <MenuItem Header="_View">
+                <MenuItem Header="_Field View" IsCheckable="True" IsChecked="True" Click="FieldView_Click"/>
+                <MenuItem Header="_Top/Rear View" IsCheckable="True" Click="TopRearView_Click"/>
+                <Separator/>
+                <MenuItem Header="_Full Screen" Click="FullScreen_Click"/>
+                <MenuItem Header="_Reset Camera" Click="ResetCamera_Click"/>
+            </MenuItem>
+            
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About..." Click="About_Click"/>
+                <MenuItem Header="_Migration Guide..." Click="MigrationGuide_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- 
+        Main Content Area
+        =================
+        Split between 3D viewport and control panels
+        -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <!-- Left control panel -->
+                <ColumnDefinition Width="300"/>
+                <!-- Main 3D viewport -->
+                <ColumnDefinition Width="*"/>
+                <!-- Right control panel -->
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 
+            Left Control Panel
+            ==================
+            GPS status, field information, and navigation controls
+            -->
+            <Border Grid.Column="0" Style="{StaticResource ControlPanelStyle}" Margin="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <!-- GPS Status Section -->
+                        <TextBlock Text="GPS Status" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Position:" Style="{StaticResource BodyTextStyle}"/>
+                                        <TextBlock x:Name="txtLatitude" Text="Lat: ---.------" FontFamily="Consolas" FontSize="12"/>
+                                        <TextBlock x:Name="txtLongitude" Text="Lon: ---.------" FontFamily="Consolas" FontSize="12"/>
+                                        <TextBlock x:Name="txtAltitude" Text="Alt: ---.-- m" FontFamily="Consolas" FontSize="12"/>
+                                    </StackPanel>
+                                    
+                                    <Ellipse Grid.Column="1" x:Name="gpsStatusIndicator" 
+                                             Width="20" Height="20" 
+                                             Fill="Red" 
+                                             ToolTip="GPS Status"/>
+                                </Grid>
+                                
+                                <TextBlock x:Name="txtGPSQuality" Text="Quality: No Fix" Style="{StaticResource BodyTextStyle}" Margin="0,4,0,0"/>
+                                <TextBlock x:Name="txtSatelliteCount" Text="Satellites: 0" Style="{StaticResource BodyTextStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Field Information Section -->
+                        <TextBlock Text="Field Information" Style="{StaticResource HeaderTextStyle}" Margin="0,16,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <TextBlock x:Name="txtFieldName" Text="Field: (No field loaded)" Style="{StaticResource BodyTextStyle}"/>
+                                <TextBlock x:Name="txtFieldArea" Text="Area: 0.0 ha" Style="{StaticResource BodyTextStyle}"/>
+                                <TextBlock x:Name="txtCoveredArea" Text="Covered: 0.0 ha (0%)" Style="{StaticResource BodyTextStyle}"/>
+                                <TextBlock x:Name="txtSpeed" Text="Speed: 0.0 km/h" Style="{StaticResource BodyTextStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Camera Controls Section -->
+                        <TextBlock Text="Camera Controls" Style="{StaticResource HeaderTextStyle}" Margin="0,16,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <Button Content="Field View" Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="FieldView_Click" Margin="0,2"/>
+                                <Button Content="Top/Rear View" Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="TopRearView_Click" Margin="0,2"/>
+                                <Button Content="Reset Camera" Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="ResetCamera_Click" Margin="0,2"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- 
+            Main 3D Viewport
+            =================
+            HelixToolkit 3D viewport for field, vehicle, and boom visualization
+            
+            Migration Notes:
+            - Replaces the OpenGL GLControl from the original Windows Forms version
+            - Uses HelixToolkit.Wpf.SharpDX for DirectX 11 hardware acceleration
+            - Supports multiple camera views and smooth transitions
+            - Renders DEM-based terrain, vehicle, booms, and guidance overlays
+            -->
+            <Border Grid.Column="1" BorderBrush="#E0E0E0" BorderThickness="1" Margin="4">
+                <hx:HelixViewport3D x:Name="viewport3D" 
+                                    Background="CornflowerBlue"
+                                    ShowCoordinateSystem="False"
+                                    ShowViewCube="True"
+                                    ZoomExtentsWhenLoaded="True">
+                    
+                    <!-- 
+                    Camera Configuration
+                    ===================
+                    Perspective camera with agricultural field viewing optimizations
+                    -->
+                    <hx:HelixViewport3D.Camera>
+                        <PerspectiveCamera x:Name="camera"
+                                           Position="0,0,50"
+                                           LookDirection="0,0,-1"
+                                           UpDirection="0,1,0"
+                                           FieldOfView="45"
+                                           NearPlaneDistance="0.1"
+                                           FarPlaneDistance="10000"/>
+                    </hx:HelixViewport3D.Camera>
+
+                    <!-- 
+                    Lighting Setup
+                    ==============
+                    Optimized lighting for outdoor agricultural visualization
+                    -->
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <DirectionalLight Direction="0.5,-1,-0.5" Color="White"/>
+                                <AmbientLight Color="#404040"/>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+
+                    <!-- 
+                    3D Scene Content
+                    ================
+                    All 3D models and visualizations will be added here programmatically
+                    through the ViewModel and data binding
+                    
+                    Content includes:
+                    - DEM-based terrain surface
+                    - Vehicle (tractor) model
+                    - Boom sections (center, left wing, right wing)
+                    - Field boundaries and guidance lines
+                    - Coverage patches and overlays
+                    -->
+
+                </hx:HelixViewport3D>
+            </Border>
+
+            <!-- 
+            Right Control Panel
+            ===================
+            ABLS boom controls, height settings, and system status
+            -->
+            <Border Grid.Column="2" Style="{StaticResource ControlPanelStyle}" Margin="8">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <!-- ABLS Status Section -->
+                        <TextBlock Text="ABLS Status" Style="{StaticResource HeaderTextStyle}" Margin="0,0,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <TextBlock Grid.Column="0" Text="System Status:" Style="{StaticResource BodyTextStyle}"/>
+                                    <Ellipse Grid.Column="1" x:Name="ablsStatusIndicator" 
+                                             Width="20" Height="20" 
+                                             Fill="Red" 
+                                             ToolTip="ABLS Status"/>
+                                </Grid>
+                                
+                                <TextBlock x:Name="txtABLSMode" Text="Mode: Manual" Style="{StaticResource BodyTextStyle}" Margin="0,4,0,0"/>
+                                <TextBlock x:Name="txtTargetHeight" Text="Target Height: 50 cm" Style="{StaticResource BodyTextStyle}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Boom Position Section -->
+                        <TextBlock Text="Boom Positions" Style="{StaticResource HeaderTextStyle}" Margin="0,16,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <TextBlock Text="Left Wing:" Style="{StaticResource BodyTextStyle}" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="txtLeftWingHeight" Text="Height: 50.0 cm" FontFamily="Consolas" FontSize="12"/>
+                                <TextBlock x:Name="txtLeftWingAngle" Text="Angle: 0.0°" FontFamily="Consolas" FontSize="12"/>
+                                
+                                <TextBlock Text="Center:" Style="{StaticResource BodyTextStyle}" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                <TextBlock x:Name="txtCenterHeight" Text="Height: 50.0 cm" FontFamily="Consolas" FontSize="12"/>
+                                
+                                <TextBlock Text="Right Wing:" Style="{StaticResource BodyTextStyle}" FontWeight="SemiBold" Margin="0,8,0,0"/>
+                                <TextBlock x:Name="txtRightWingHeight" Text="Height: 50.0 cm" FontFamily="Consolas" FontSize="12"/>
+                                <TextBlock x:Name="txtRightWingAngle" Text="Angle: 0.0°" FontFamily="Consolas" FontSize="12"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Height Control Section -->
+                        <TextBlock Text="Height Control" Style="{StaticResource HeaderTextStyle}" Margin="0,16,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <TextBlock Text="Target Height (cm):" Style="{StaticResource BodyTextStyle}"/>
+                                <Slider x:Name="sliderTargetHeight" 
+                                        Minimum="20" Maximum="100" 
+                                        Value="50" 
+                                        TickFrequency="10" 
+                                        IsSnapToTickEnabled="True"
+                                        ValueChanged="TargetHeight_Changed"/>
+                                <TextBlock x:Name="txtTargetHeightValue" Text="50 cm" 
+                                           HorizontalAlignment="Center" 
+                                           FontWeight="SemiBold"/>
+                                
+                                <Button Content="Auto Mode" Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="AutoMode_Click" Margin="0,8,0,2"/>
+                                <Button Content="Manual Mode" Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="ManualMode_Click" Margin="0,2"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- DEM Information Section -->
+                        <TextBlock Text="Terrain Data" Style="{StaticResource HeaderTextStyle}" Margin="0,16,0,8"/>
+                        
+                        <Border Style="{StaticResource ControlPanelStyle}" Background="#F8F9FA">
+                            <StackPanel>
+                                <TextBlock x:Name="txtDEMStatus" Text="DEM: Not loaded" Style="{StaticResource BodyTextStyle}"/>
+                                <TextBlock x:Name="txtDEMResolution" Text="Resolution: --" Style="{StaticResource BodyTextStyle}"/>
+                                <TextBlock x:Name="txtTerrainElevation" Text="Ground Elevation: -- m" Style="{StaticResource BodyTextStyle}"/>
+                                
+                                <Button Content="Load DEM..." Style="{StaticResource PrimaryButtonStyle}" 
+                                        Click="LoadDEM_Click" Margin="0,8,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- 
+        Status Bar
+        ==========
+        Real-time system status and performance information
+        -->
+        <StatusBar Grid.Row="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <StatusBarItem>
+                <TextBlock x:Name="txtSystemStatus" Text="System: Ready"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="txtFrameRate" Text="FPS: --"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="txtDataRate" Text="GPS: -- Hz"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="txtConnectionStatus" Text="Connections: Disconnected"/>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using AOG;
+using AOG.Classes;
 
 namespace Drive
 {
@@ -19,10 +21,12 @@ namespace Drive
             mf = callingForm as FormGPS;
             InitializeComponent();
 
-            this.label5.Text = gStr.gsSetPoint;
-            this.label1.Text = gStr.gsActual;
+            // TODO: Translation constants now housed in "gs" auto-generated class
+// Replace legacy gStr reference with gs for compile-time safety. Review during language-system refactor.
+this.label5.Text = gs.gsSetPoint;
+            this.label1.Text = gs.gsActual;
 
-            this.Text = gStr.gsSteerChart;
+            this.Text = gs.gsSteerChart;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -71,7 +75,8 @@ namespace Drive
 
         private void FormSteerGraph_Load(object sender, EventArgs e)
         {
-            timer1.Interval = (int)((1 / (double)mf.fixUpdateHz) * 1000);
+            // Use FormGPS public gpsHz for refresh rate; original fixUpdateHz no longer exists after .NET 8 migration.
+            timer1.Interval = (int)((1 / (double)mf.gpsHz) * 1000);
         }
 
         private void button1_Click(object sender, EventArgs e)

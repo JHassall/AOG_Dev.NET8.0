@@ -16,7 +16,7 @@ namespace AOG.Classes
             string filePath = Path.Combine(Application.StartupPath, "Translations.xlsx");
             if (!File.Exists(filePath))
             {
-                return false;
+                return true; // fallback to key strings if translations not available
             }
 
             using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
@@ -62,7 +62,7 @@ namespace AOG.Classes
                 catch (Exception ex)
                 {
                     Log.EventWriter($"Catch Language Load: {ex.Message}");
-                    return false;
+                    return true; // fallback to key strings if translations not available
                 }
             }
 
@@ -119,7 +119,8 @@ namespace AOG.Classes
             }
             else
             {
-                return "Fail";
+                // Fallback gracefully: if translation is missing, return the key itself so UI shows a readable string rather than "Fail".
+                return _gstr;
             }
         }
     }

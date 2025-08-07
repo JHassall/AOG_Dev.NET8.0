@@ -1,0 +1,102 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- 
+    WPF 3D Migration Project Configuration
+    =====================================
+    This is the new WPF-based replacement for the OpenGL-based AOG application.
+    
+    Migration Goals:
+    - Replace Windows Forms + OpenGL with modern WPF 3D
+    - Add ABLS support with DEM terrain visualization
+    - Implement multiple camera views (field view, top/rear view)
+    - Support real-time boom positioning and terrain following
+    
+    Target Framework: .NET 8 for modern performance and features
+    Output Type: WinExe for Windows desktop application
+    Use WPF: Required for WPF 3D capabilities
+    -->
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <AssemblyTitle>AgOpenGPS WPF 3D</AssemblyTitle>
+    <AssemblyDescription>Modern WPF 3D agricultural guidance system with ABLS support</AssemblyDescription>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    
+    <!-- 
+    Platform Configuration
+    ======================
+    Force x64 to match original AOG configuration and ensure compatibility
+    with 64-bit GPS/sensor libraries and large DEM datasets
+    -->
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+    
+    <!-- 
+    Performance Optimizations
+    =========================
+    Enable optimizations for 3D rendering performance
+    -->
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 
+    HelixToolkit WPF 3D Framework
+    =============================
+    Primary 3D rendering framework for the migration
+    
+    HelixToolkit.Wpf: Standard WPF 3D implementation for .NET 8 compatibility
+    - Uses native WPF 3D (Media3D namespace)
+    - Full .NET 8 support
+    - MVVM compatibility
+    - Good performance for agricultural visualization
+    
+    Note: Using standard WPF version instead of SharpDX for .NET 8 compatibility
+    Version 2.27.0 is the latest stable release (final v2 release)
+    -->
+    <PackageReference Include="HelixToolkit.Wpf" Version="2.27.0" />
+    
+    <!-- 
+    Additional WPF and System Libraries
+    ===================================
+    System.Text.Json: For configuration and data serialization (matches original AOG)
+    Microsoft.Extensions.Logging: For comprehensive logging throughout migration
+    
+    Version 8.0.5 to match AOG project and fix package downgrade error
+    -->
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+    
+    <!-- 
+    Serial Communication (for GPS/sensor data)
+    ==========================================
+    Maintain compatibility with original AOG serial communication
+    -->
+    <PackageReference Include="System.IO.Ports" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 
+    Project References
+    ==================
+    Reference to original AOG project for shared data structures and GPS logic
+    This allows gradual migration while maintaining compatibility
+    -->
+    <ProjectReference Include="..\AOG\AOG.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 
+    Resource Files
+    ==============
+    Application icon and other resources
+    -->
+    <Resource Include="Resources\**\*" />
+  </ItemGroup>
+
+</Project>

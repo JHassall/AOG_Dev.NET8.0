@@ -29,7 +29,7 @@ namespace AOG
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.oglSelf = new OpenTK.WinForms.GLControl();
+            this.oglSelf = new OpenTK.GLControl.GLControl();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.cboxPointDistance = new System.Windows.Forms.ComboBox();
             this.cboxSmooth = new System.Windows.Forms.ComboBox();
@@ -651,7 +651,7 @@ namespace AOG
 
         #endregion
 
-        private OpenTK.WinForms.GLControl oglSelf;
+        private OpenTK.GLControl.GLControl oglSelf;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.Button btnCancelTouch;

@@ -31,7 +31,7 @@ namespace AOG.Forms.Field
             this.lbFields = new System.Windows.Forms.ListView();
             this.chName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnOpen = new System.Windows.Forms.Button();
-            this.glControl1 = new OpenTK.WinForms.GLControl();
+            this.glControl1 = new OpenTK.GLControl.GLControl();
             this.btnClose = new System.Windows.Forms.Button();
             this.lblSelectedField = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -142,7 +142,7 @@ namespace AOG.Forms.Field
         private System.Windows.Forms.ListView lbFields;
         private System.Windows.Forms.ColumnHeader chName;
         private System.Windows.Forms.Button btnOpen;
-        private OpenTK.WinForms.GLControl glControl1;
+        private OpenTK.GLControl.GLControl glControl1;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Label lblSelectedField;
     }

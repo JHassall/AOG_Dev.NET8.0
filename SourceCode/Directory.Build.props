@@ -1,0 +1,18 @@
+<Project>
+  <PropertyGroup>
+    <!-- Treat all projects as Windows-only, suppress CA1416 noise -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- Minimum supported OS: Windows 7 / Server 2008 R2 (v6.1) -->
+    <SupportedOSPlatformVersion>6.1</SupportedOSPlatformVersion>
+
+    <!-- Force resource generation to use 64-bit task host to avoid MSB4216 on x86 runtime absence -->
+    <GenerateResourceMSBuildArchitecture>x64</GenerateResourceMSBuildArchitecture>
+    <!-- Fix for MSB3822/MSB3823 resource serialization errors -->
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Provide System.Resources.Extensions runtime for resource serialization -->
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+  </ItemGroup>
+</Project>
